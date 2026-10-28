@@ -223,6 +223,54 @@ async function runSmoke() {
     ok(wc.getURL().startsWith('file://'), `通过 file:// 加载本地页面（${wc.getURL().slice(0, 46)}…）`);
     const b = win.getBounds();
     ok(b.width > 0 && b.height > 0, `窗口已布局 ${b.width}x${b.height}`);
+    ok(!win.isMenuBarVisible(), '顶部原生菜单栏不可见');
+    ok(!win.isMenuBarAutoHide(), '菜单栏不启用 Alt 临时显示');
+    const menu = electron.Menu.getApplicationMenu();
+    ok(menu?.getMenuItemById('mi-export')?.accelerator === 'CmdOrCtrl+S',
+      '隐藏菜单栏后仍保留导出快捷键');
+
+    if (process.platform === 'win32') {
+      const titlebarState = () => js(`(() => {
+        const bar = document.querySelector('.window-titlebar');
+        const top = document.querySelector('.topbar');
+        const rect = bar.getBoundingClientRect();
+        const area = navigator.windowControlsOverlay.getTitlebarAreaRect();
+        return {
+          visible: navigator.windowControlsOverlay.visible,
+          width: window.innerWidth,
+          height: rect.height,
+          overlayHeight: area.height,
+          matches: getComputedStyle(bar).backgroundColor === getComputedStyle(top).backgroundColor,
+          color: getComputedStyle(bar).color,
+          drag: getComputedStyle(bar).getPropertyValue('-webkit-app-region'),
+          toolbarTop: top.getBoundingClientRect().top,
+          titleFits: bar.firstElementChild.getBoundingClientRect().right <= area.x + area.width,
+        };
+      })()`);
+      const titlebar = await titlebarState();
+      ok(titlebar.visible, '原生窗口控制按钮已启用');
+      ok(titlebar.matches && titlebar.color === 'rgb(43, 52, 64)', '标题栏与内部顶栏同底色、深灰文字');
+      ok(titlebar.height > 0 && titlebar.height === titlebar.overlayHeight,
+        `标题栏高度与原生按钮一致（${titlebar.height}px）`);
+      ok(titlebar.drag === 'drag', '标题栏保留原生拖动区域');
+      ok(titlebar.toolbarTop >= titlebar.height && titlebar.titleFits, '标题、原生按钮和工具栏互不遮挡');
+
+      win.setSize(1024, 680);
+      ok(await waitFor(async () => {
+        const narrow = await titlebarState();
+        return narrow.width <= 1024 && narrow.titleFits && narrow.toolbarTop >= narrow.height;
+      }), '最小窗口下标题与工具栏仍不遮挡');
+      win.setSize(b.width, b.height);
+      win.setFullScreen(true);
+      const fullReady = await waitFor(async () => {
+        const full = await titlebarState();
+        return win.isFullScreen() && full.height === 0 && full.toolbarTop === 0;
+      });
+      ok(fullReady, `全屏时标题栏不留空白（${JSON.stringify(await titlebarState())}）`);
+      win.setFullScreen(false);
+      ok(await waitFor(async () => (await titlebarState()).height === titlebar.height),
+        '退出全屏后标题栏高度恢复');
+    }
 
     head('2. preload 桥接（contextIsolation 生效下仍能通信）');
     const bridge = await js(`(() => {

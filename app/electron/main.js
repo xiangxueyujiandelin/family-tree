@@ -359,7 +359,13 @@ function createWindow() {
     minWidth: 1024,
     minHeight: 680,
     title: '家族谱 · 称谓自动推导',
-    backgroundColor: '#eef1f6',
+    backgroundColor: '#ffffff',
+    titleBarStyle: process.platform === 'win32' ? 'hidden' : 'default',
+    titleBarOverlay: process.platform === 'win32' ? {
+      color: '#ffffff',
+      symbolColor: '#2b3440',
+      height: 32,
+    } : false,
     show: false,
     autoHideMenuBar: false,
     webPreferences: {
@@ -368,6 +374,13 @@ function createWindow() {
       nodeIntegration: false,     // 更别想直接 require
       spellcheck: false,
     },
+  });
+  win.setMenuBarVisibility(false);
+  // Windows 原生全屏不会清零 titlebar-area-height，需同步状态给页面。
+  win.on('enter-full-screen', () => win.webContents.send('window:fullscreen', true));
+  win.on('leave-full-screen', () => win.webContents.send('window:fullscreen', false));
+  win.webContents.on('did-finish-load', () => {
+    win.webContents.send('window:fullscreen', win.isFullScreen());
   });
 
   // 首帧画完再显示，避免白屏闪一下（自检模式不显示窗口）

@@ -19,6 +19,10 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 
+ipcRenderer.on('window:fullscreen', (_event, fullscreen) => {
+  document.documentElement.classList.toggle('window-fullscreen', fullscreen);
+});
+
 /**
  * 启动时**一次性同步**取回整份数据。
  * 为什么同步：src/store.js 的 loadDataset() 是同步函数，而 boot() 也是同步流程。

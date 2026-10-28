@@ -55,6 +55,22 @@ button { cursor: pointer; border: 0; background: none; }
    ========================================================= */
 .app { height: 100vh; display: flex; flex-direction: column; }
 
+/* 原生窗口按钮占用区域由 Electron 提供，浏览器和全屏时不占高度。 */
+.window-titlebar {
+  flex: 0 0 env(titlebar-area-height, 0px);
+  height: env(titlebar-area-height, 0px);
+  background: var(--bg-surface); color: var(--ink-700);
+  display: flex; align-items: center;
+  overflow: hidden; user-select: none;
+  -webkit-app-region: drag;
+}
+.window-fullscreen .window-titlebar { display: none; }
+.window-titlebar span {
+  margin-left: calc(env(titlebar-area-x, 0px) + var(--sp-4));
+  max-width: calc(env(titlebar-area-width, 100vw) - 2 * var(--sp-4));
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+
 /* ---------- 顶栏 ---------- */
 .topbar {
   height: var(--topbar-h); flex: 0 0 var(--topbar-h);
