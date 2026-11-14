@@ -42,7 +42,7 @@
 |---|---|
 | 源码版本 | **v0.2.86**（`app/package.json`） |
 | 最近一次打包 | **v0.2.86**（2026-10-28）—— `dist/v0.2.86/` 内安装版 / 免安装版 / `.blockmap` 齐全；GitHub Release 附件已上传，但 `v0.2.85` 与 `v0.2.86` 两版仍是 **Draft**，未正式发布 |
-| 仓库 | [github.com/13849799704/family-tree](https://github.com/13849799704/family-tree) —— 公开仓库，MIT 协议 |
+| 仓库 | [github.com/xiangxueyujiandelin/family-tree](https://github.com/xiangxueyujiandelin/family-tree) —— 公开仓库，MIT 协议 |
 | 平台 | Windows x64（Electron 44 + sql.js） |
 | 数据 | 纯本地 SQLite，不联网、不上传 |
 
@@ -470,14 +470,14 @@ Release（tag 形如 `v0.2.85`），并把安装版、免安装版和 `.blockmap
   （实测 v0.2.85 就丢了 `.blockmap`）。所以每次发完必查：
 
   ```bash
-  gh release view v0.2.85 --repo 13849799704/family-tree --json assets --jq ".assets[].name"
+  gh release view v0.2.85 --repo xiangxueyujiandelin/family-tree --json assets --jq ".assets[].name"
   ```
 
   应为三行：`Genogram-Setup-<版本>.exe`、`Genogram-Portable-<版本>.exe`、`Genogram-Setup-<版本>.exe.blockmap`。
   缺哪个补哪个（`--clobber` 覆盖同名）：
 
   ```bash
-  gh release upload v0.2.85 d:\族谱pc端项目\dist\Genogram-Setup-0.2.85.exe.blockmap --repo 13849799704/family-tree --clobber
+  gh release upload v0.2.85 d:\族谱pc端项目\dist\Genogram-Setup-0.2.85.exe.blockmap --repo xiangxueyujiandelin/family-tree --clobber
   ```
 
 ### 7.4 装包后必须验的三件事

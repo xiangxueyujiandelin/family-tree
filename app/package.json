@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/13849799704/family-tree.git"
+    "url": "https://github.com/xiangxueyujiandelin/family-tree.git"
   },
   "type": "module",
   "main": "electron/main.js",
@@ -123,7 +123,7 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "13849799704",
+        "owner": "xiangxueyujiandelin",
         "repo": "family-tree",
         "releaseType": "release"
       }
