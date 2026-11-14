@@ -41,7 +41,7 @@
 | 项 | 值 |
 |---|---|
 | 源码版本 | **v0.2.86**（`app/package.json`） |
-| 最近一次打包 | **v0.2.85** —— 含 F12 照片管理；v0.2.86 的菜单栏与标题栏改动尚未打包 |
+| 最近一次打包 | **v0.2.86**（2026-10-28）—— `dist/v0.2.86/` 内安装版 / 免安装版 / `.blockmap` 齐全；GitHub Release 附件已上传，但 `v0.2.85` 与 `v0.2.86` 两版仍是 **Draft**，未正式发布 |
 | 仓库 | [github.com/13849799704/family-tree](https://github.com/13849799704/family-tree) —— 公开仓库，MIT 协议 |
 | 平台 | Windows x64（Electron 44 + sql.js） |
 | 数据 | 纯本地 SQLite，不联网、不上传 |
@@ -429,16 +429,17 @@ npm run dist:publish # 构建 + 自动发到 GitHub Releases（见 §7.3）
 
 ### 7.3 产物
 
-落在 `D:\族谱pc端项目\dist\`（**故意不放应用目录、更不放 C 盘**）：
+落在仓库根的 `dist/`（**故意不放应用目录、更不放 C 盘**）；v0.2.86 的产物按版本单独放在 `dist/v0.2.86/`：
 
 | 文件 | 说明 |
 |---|---|
-| `Genogram-Setup-0.2.80.exe` | **安装版**（约 107 MB）。安装目录在向导里自选，默认 `C:\Users\<用户名>\AppData\Local\Programs\家族谱` |
-| `Genogram-Portable-0.2.80.exe` | **免安装版**（约 106.8 MB）。双击就跑，适合放 U 盘随身带 |
-| `Genogram-Setup-0.2.80.exe.blockmap` | 安装版的差分索引，给「自动更新」用（尚未实现，见 §9） |
+| `Genogram-Setup-0.2.86.exe` | **安装版**（约 107.1 MB）。安装目录在向导里自选，默认 `C:\Users\<用户名>\AppData\Local\Programs\家族谱` |
+| `Genogram-Portable-0.2.86.exe` | **免安装版**（约 106.9 MB）。双击就跑，适合放 U 盘随身带 |
+| `Genogram-Setup-0.2.86.exe.blockmap` | 安装版的差分索引，给「自动更新」用（尚未实现，见 §9） |
 | `win-unpacked\` | 解包后的程序目录，调试用 |
+| `latest.yml` | electron-builder 生成的版本索引，同样留给未来的自动更新（未实现，见 §9） |
 
-> 源码当前版本见 §1 —— `dist/` 里的 exe 版本号会落后于源码；下次 `npm run dist` 前先核对版本号。
+> 源码当前版本见 §1 —— 打包是某个时间点的快照，之后源码仍会继续改；下次 `npm run dist` 前先按 §7.1 核对版本号。
 
 **发布到 GitHub Releases**（别人从仓库页面直接下载安装包走这条路）：
 
